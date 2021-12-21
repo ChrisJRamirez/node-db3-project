@@ -34,8 +34,39 @@ async function findById(scheme_id) {
   .select("sc.scheme_name","st.*")
   .orderBy("st.step_number","asc")
 
-  return rows
+  let result = {steps:[]}
 
+  for(let record of rows){
+    if(!result.scheme_name){
+      result.scheme_id = record.scheme_id
+      result.scheme_name = record.scheme_name
+    }
+    if(record.step_id){
+      result.steps.push({
+        step_id:record.step_id,
+        step_number:record.step_number,
+        instructions:record.instructions
+      })
+    }
+  }
+  return result
+//   {
+//   "scheme_id": 1,
+//   "scheme_name": "World Domination",
+//   "steps": [
+//     {
+//       "step_id": 2,
+//       "step_number": 1,
+//       "instructions": "solve prime number theory"
+//     },
+//     {
+//       "step_id": 1,
+//       "step_number": 2,
+//       "instructions": "crack cyber security"
+//     },
+//     // etc
+//   ]
+// }
   
   
   // EXERCISE B
