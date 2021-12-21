@@ -9,15 +9,15 @@ const Scheme = require("./scheme-model");
   }
 */
 const checkSchemeId = async (req, res, next) => {
-  try{
+  try {
     const scheme = await Scheme.findById(req.params.id);
-    if(scheme){
+    if (scheme) {
       req.scheme = scheme
       next()
-    } else{
-      res.status(404).json({message:`scheme with scheme_id ${req.params.id} not found`})
+    } else {
+      res.status(404).json({ message: `scheme with scheme_id ${req.params.id} not found` })
     }
-  } catch(err){
+  } catch (err) {
     next(err)
   }
 }
@@ -31,15 +31,15 @@ const checkSchemeId = async (req, res, next) => {
   }
 */
 const validateScheme = (req, res, next) => {
-  const {scheme_name} = req.body;
-  if(!scheme_name){
-    res.status(400).json({message:"invalid scheme name"})
+  const { scheme_name } = req.body;
+  if (!scheme_name) {
+    res.status(400).json({ message: "invalid scheme name" })
   }
-  else if (scheme_name === ""){
-    res.status(400).json({message:"invalid scheme name"})
+  else if (scheme_name === "") {
+    res.status(400).json({ message: "invalid scheme name" })
   }
-  else if (typeof scheme_name !== "string"){
-    res.status(400).json({message:"invalid scheme name"})
+  else if (typeof scheme_name !== "string") {
+    res.status(400).json({ message: "invalid scheme name" }) // could prob combine this with or statement above
   }
   else {
     next()
@@ -56,7 +56,16 @@ const validateScheme = (req, res, next) => {
   }
 */
 const validateStep = (req, res, next) => {
-
+  const { instructions, step_number } = req.body;
+  if (!instructions || instructions === "" || typeof instructions !== "string") {
+    res.status(400).json({ message: "invalid step" })
+  }
+  else if (typeof step_number !== "number" || isNaN(step_number) || step_number < 1) {
+    res.status(400).json({ message: "invalid step" })
+  }
+  else {
+    next()
+  }
 }
 
 module.exports = {
