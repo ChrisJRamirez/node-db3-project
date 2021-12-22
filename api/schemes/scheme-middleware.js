@@ -48,18 +48,25 @@ const checkSchemeId = async (req, res, next) => {
 */
 const validateScheme = (req, res, next) => {
   const { scheme_name } = req.body;
-  if (!scheme_name || scheme_name === undefined) {
-    res.status(400).json({ message: "invalid scheme name" })
-  }
-  else if (scheme_name === "") {
-    res.status(400).json({ message: "invalid scheme name" })
-  }
-  else if (typeof scheme_name !== "string") {
-    res.status(400).json({ message: "invalid scheme name" }) // could prob combine this with or statement above
-  }
-  else {
+
+  if(
+    scheme_name === undefined ||
+    typeof scheme_name !== "string" ||
+    !scheme_name.trim()
+  ) {
+    next({status: 400, message: "invalid scheme_name"})
+  } else{
     next()
   }
+  // if (!scheme_name.trim() || 
+  // scheme_name === undefined || 
+  // typeof scheme_name !== "string") 
+  // {
+  //   res.status(400).json({ message: "invalid scheme name" })
+  // }
+  // else {
+  //   next()
+  // }
 }
 
 /*
